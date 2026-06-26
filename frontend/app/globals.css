@@ -1,0 +1,25 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background: #0a0d14;
+  color: #fff;
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+    sans-serif;
+}
+
+/* React Flow dark surface */
+.react-flow {
+  background: transparent;
+}
+.react-flow__edge-path {
+  transition: stroke 0.25s ease, stroke-width 0.25s ease;
+}
+.react-flow__controls,
+.react-flow__panel {
+  display: none;
+}
