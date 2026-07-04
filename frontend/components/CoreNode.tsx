@@ -2,7 +2,7 @@
 
 import { memo } from "react";
 import { Handle, Position, type NodeProps } from "reactflow";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import type { CoreState } from "@/lib/events";
 
 export interface CoreData {
@@ -12,29 +12,43 @@ export interface CoreData {
 
 function CoreNodeImpl({ data }: NodeProps<CoreData>) {
   const orchestrating = data.state === "orchestrating";
+  const reduce = useReducedMotion();
+  const pulse = orchestrating && !reduce;
   return (
     <div className="relative flex flex-col items-center select-none">
       <Handle type="source" position={Position.Bottom} className="!opacity-0" />
       <Handle type="target" position={Position.Top} className="!opacity-0" />
 
+      {/* Soft breathing halo behind the ring */}
+      <motion.div
+        aria-hidden
+        className="absolute top-0 h-28 w-28 rounded-full"
+        style={{
+          background:
+            "radial-gradient(circle, rgba(255,138,61,0.35) 0%, rgba(255,138,61,0) 70%)",
+        }}
+        animate={pulse ? { scale: [1, 1.5, 1], opacity: [0.5, 0.85, 0.5] } : { scale: 1.2, opacity: 0.4 }}
+        transition={{ duration: 2.4, repeat: pulse ? Infinity : 0, ease: "easeInOut" }}
+      />
+
       {/* Outer orange ring */}
       <motion.div
         animate={
-          orchestrating
+          pulse
             ? { scale: [1, 1.06, 1], opacity: [0.9, 1, 0.9] }
             : { scale: 1, opacity: 0.85 }
         }
         transition={{
-          duration: orchestrating ? 1.6 : 0.6,
-          repeat: orchestrating ? Infinity : 0,
+          duration: pulse ? 1.6 : 0.6,
+          repeat: pulse ? Infinity : 0,
           ease: "easeInOut",
         }}
-        className="h-28 w-28 rounded-full border-2 border-core shadow-coreglow flex items-center justify-center bg-[#140d08]"
+        className="relative h-28 w-28 rounded-full border-2 border-core shadow-coreglow flex items-center justify-center bg-[#140d08]"
       >
         {/* Inner teal particle cluster */}
         <motion.div
-          animate={{ rotate: 360 }}
-          transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
+          animate={reduce ? { rotate: 0 } : { rotate: 360 }}
+          transition={{ duration: 8, repeat: reduce ? 0 : Infinity, ease: "linear" }}
           className="h-16 w-16 rounded-full flex items-center justify-center"
           style={{
             background:

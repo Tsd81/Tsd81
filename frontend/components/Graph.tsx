@@ -15,8 +15,10 @@ import { placeNodes } from "@/lib/layout";
 import type { OrchestratorState } from "@/lib/useOrchestrator";
 import { CoreNode } from "./CoreNode";
 import { OrbNode } from "./OrbNode";
+import { FlowEdge } from "./FlowEdge";
 
 const nodeTypes: NodeTypes = { core: CoreNode, orb: OrbNode };
+const edgeTypes = { flow: FlowEdge };
 
 interface GraphProps {
   cfg: NodesConfig;
@@ -28,13 +30,15 @@ export function Graph({ cfg, state }: GraphProps) {
 
   // Static edge skeleton: core→inner agents, tools→their connected agents.
   const edgePairs = useMemo(() => {
-    const pairs: { from: string; to: string }[] = [];
+    const pairs: { from: string; to: string; ring: "core" | "tool" }[] = [];
     for (const n of cfg.nodes) {
-      if (n.ring === "inner") pairs.push({ from: cfg.core.id, to: n.id });
+      if (n.ring === "inner")
+        pairs.push({ from: cfg.core.id, to: n.id, ring: "core" });
     }
     for (const n of cfg.nodes) {
       if (n.type === "tool" && n.connects) {
-        for (const a of n.connects) pairs.push({ from: a, to: n.id });
+        for (const a of n.connects)
+          pairs.push({ from: a, to: n.id, ring: "tool" });
       }
     }
     return pairs;
@@ -66,7 +70,7 @@ export function Graph({ cfg, state }: GraphProps) {
   }, [cfg, placed, state.core, state.nodes]);
 
   const rfEdges: Edge[] = useMemo(() => {
-    return edgePairs.map(({ from, to }) => {
+    return edgePairs.map(({ from, to, ring }) => {
       const active =
         state.activeEdges.has(`${from}->${to}`) ||
         state.activeEdges.has(`${to}->${from}`);
@@ -74,12 +78,8 @@ export function Graph({ cfg, state }: GraphProps) {
         id: `${from}-${to}`,
         source: from,
         target: to,
-        type: "default", // bezier = curved
-        animated: active,
-        style: {
-          stroke: active ? "#2dd4bf" : "rgba(255,255,255,0.08)",
-          strokeWidth: active ? 2.2 : 1,
-        },
+        type: "flow",
+        data: { active, ring },
       };
     });
   }, [edgePairs, state.activeEdges]);
@@ -89,6 +89,7 @@ export function Graph({ cfg, state }: GraphProps) {
       nodes={rfNodes}
       edges={rfEdges}
       nodeTypes={nodeTypes}
+      edgeTypes={edgeTypes}
       fitView
       fitViewOptions={{ padding: 0.2 }}
       minZoom={0.3}

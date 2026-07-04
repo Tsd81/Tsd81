@@ -2,7 +2,7 @@
 
 import { memo } from "react";
 import { Handle, Position, type NodeProps } from "reactflow";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import type { AgentState } from "@/lib/events";
 
 export interface OrbData {
@@ -26,21 +26,43 @@ const STATE_STYLE: Record<
 function OrbNodeImpl({ data }: NodeProps<OrbData>) {
   const s = STATE_STYLE[data.state] ?? STATE_STYLE.idle;
   const active = data.state === "working" || data.state === "thinking";
+  const isError = data.state === "error";
   const isTool = data.type === "tool";
+  const reduce = useReducedMotion();
+  const animate = !reduce;
 
   return (
     <div className="relative flex flex-col items-center select-none">
       <Handle type="target" position={Position.Top} className="!opacity-0" />
+
+      {/* Glow halo behind active / error nodes */}
+      {(active || isError) && (
+        <motion.div
+          aria-hidden
+          className="absolute rounded-full"
+          style={{
+            top: isTool ? -6 : -8,
+            height: isTool ? 60 : 80,
+            width: isTool ? 60 : 80,
+            background: isError
+              ? "radial-gradient(circle, rgba(239,68,68,0.35) 0%, rgba(239,68,68,0) 70%)"
+              : "radial-gradient(circle, rgba(45,212,191,0.30) 0%, rgba(45,212,191,0) 70%)",
+          }}
+          animate={animate ? { opacity: [0.4, 0.8, 0.4] } : { opacity: 0.6 }}
+          transition={{ duration: 1.6, repeat: animate ? Infinity : 0, ease: "easeInOut" }}
+        />
+      )}
+
       <motion.div
         animate={
-          active
+          active && animate
             ? { scale: [1, 1.08, 1] }
-            : data.state === "error"
+            : isError && animate
             ? { scale: [1, 1.04, 1] }
             : { scale: 1 }
         }
         transition={
-          active
+          active && animate
             ? { duration: 1.4, repeat: Infinity, ease: "easeInOut" }
             : { duration: 0.4 }
         }

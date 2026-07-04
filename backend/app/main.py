@@ -59,21 +59,40 @@ async def nodes() -> dict:
     return load_nodes_config()
 
 
+_HISTORY_LINES = [
+    "1969 — ARPANET's first node specs circulated, a seed of the internet.",
+    "1971 — Ray Tomlinson sent the first networked email, choosing '@'.",
+    "1991 — The first website went live at CERN.",
+    "2007 — The smartphone era began, putting agents in every pocket.",
+    "1950 — Turing asked 'Can machines think?' in Computing Machinery and Intelligence.",
+    "1956 — The Dartmouth workshop coined the term 'artificial intelligence'.",
+    "1997 — Deep Blue beat world champion Garry Kasparov at chess.",
+]
+
+
 @app.get("/api/hud")
 async def hud() -> dict:
-    """HUD data stub (greeting / history line). Weather added in Phase 1."""
+    """HUD data: greeting, real weather, one 'this day' history line."""
     import datetime
 
-    hour = datetime.datetime.now().hour
+    from .weather import get_weather
+
+    now = datetime.datetime.now()
+    hour = now.hour
     greeting = (
         "Good morning" if hour < 12 else
         "Good afternoon" if hour < 18 else
         "Good evening"
     )
+    city = os.getenv("WEATHER_CITY", "Sofia")
+    weather = await get_weather(city)  # None on failure → frontend shows fallback
+    # Deterministic per-day rotation (no randomness → stable across a day).
+    history = _HISTORY_LINES[now.timetuple().tm_yday % len(_HISTORY_LINES)]
     return {
         "greeting": greeting,
-        "history": "1969 — ARPANET's first node specs circulated, a seed of the internet.",
-        "city": os.getenv("WEATHER_CITY", "Sofia"),
+        "history": history,
+        "city": city,
+        "weather": weather,
     }
 
 
