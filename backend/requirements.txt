@@ -1,6 +1,11 @@
-fastapi==0.115.6
-uvicorn[standard]==0.34.0
-pydantic==2.10.4
+# Reconciled to co-exist with CrewAI's dependency tree (newer starlette/pydantic).
+fastapi==0.139.2
+uvicorn[standard]==0.51.0
+pydantic==2.12.5
 httpx==0.28.1
 websockets==14.1
 anthropic==0.42.0
+
+# Agent framework (hierarchical crew). Heavy; used when ANTHROPIC_API_KEY is set.
+# The [anthropic] extra provides CrewAI's native Claude provider.
+crewai[anthropic]==1.15.4

@@ -12,12 +12,18 @@ stream, not a canned animation.**
 > → you get a synthesized answer, with the graph reflecting the actual run. Works
 > **with or without** an API key (deterministic offline mock when no key is set).
 >
-> **Note on the agent framework:** the master prompt specified CrewAI. This build
-> uses a **custom hierarchical orchestrator behind a swappable interface** instead,
-> because (a) event emission needs fine-grained control and (b) a CrewAI run can't
-> be verified in the build sandbox without an API key. The LLM provider and the
-> orchestrator both sit behind interfaces, so a CrewAI adapter can drop in without
-> touching the graph, contract, or frontend. Say the word and I'll switch to CrewAI.
+> **Agent framework — CrewAI (hierarchical).** When `ANTHROPIC_API_KEY` is set, a
+> task runs as a real **CrewAI hierarchical crew**: a manager agent delegates to
+> the 13 role agents, which use MCP-style connector tools; events are bridged from
+> the crew back to the WebSocket so the graph animates. When **no key** is present
+> (or if a crew errors), it falls back to a **deterministic custom orchestrator**
+> with precise event emission — so the dashboard works out of the box and stays
+> testable offline. `GET /api/health` reports the active `engine`
+> (`crewai` or `custom-mock`).
+>
+> The CrewAI crew (13 agents + hierarchical manager + wired tools) is verified to
+> **construct** in the build sandbox; the live `kickoff()` LLM call is exercised on
+> your machine once you add a key.
 
 ---
 
@@ -32,6 +38,9 @@ cp .env.example .env
 # 2. start everything (qdrant + backend + frontend)
 docker compose up --build
 ```
+
+> The first build downloads CrewAI and its dependencies, so it takes a few
+> minutes. Subsequent starts are fast (Docker caches the layer).
 
 Wait until you see the frontend and backend logs settle, then open:
 
@@ -85,11 +94,11 @@ npm run dev
 | `/api/task` end-to-end run emitting real contract events | ✅ real |
 | Clickable node → side panel with live log, tool calls, output | ✅ real |
 | Task persistence (survives restart) + `/api/tasks` history | ✅ real |
-| LLM provider — **real Claude** (Anthropic SDK) when key set | ✅ real |
-| LLM provider — deterministic **offline mock** when no key | ✅ real (fallback) |
+| Agent framework — **CrewAI hierarchical crew** when key set | ✅ real |
+| Agent framework — custom offline orchestrator when no key / on error | ✅ real (fallback) |
+| LLM — real Claude via CrewAI native provider (key) / mock (no key) | ✅ real |
 | Tools (Email/Calendar/Drive) — realistic data behind a stable interface | 🟡 mock data, real interface + events |
 | Memory — Qdrant-backed when reachable, else in-memory | 🟡 real store; hash "embeddings" (swap for real embedder) |
-| Agent framework | 🟡 custom orchestrator (CrewAI swap available on request) |
 | MCP wire protocol, real Gmail/Calendar/Drive connectors, auth | ⏳ Phase 5 |
 
 > **Weather note:** uses [Open-Meteo](https://open-meteo.com) — free, no API key.
@@ -108,7 +117,8 @@ npm run dev
   app/broadcaster.py WS connection manager + authoritative runtime state
   app/llm.py        Swappable LLM provider (Anthropic real + offline mock)
   app/connectors.py Tool/data connectors (Email/Calendar/Drive/Memory)
-  app/orchestrator.py  Manager → delegation → agents → tools → synthesis
+  app/crew.py       CrewAI hierarchical orchestrator (+ fallback to custom)
+  app/orchestrator.py  Custom manager → delegation → tools → synthesis (fallback)
   app/tasks.py      Task/agent run store (+ JSON persistence)
   app/fake_loop.py  Optional demo-mode event generator (DEMO_MODE=1)
   app/weather.py    Real weather via Open-Meteo
@@ -165,6 +175,7 @@ the runtime and the visual — they can't drift.
 - **Phase 2 — Real orchestrator, one role end-to-end** ✅
 - **Phase 3 — All role agents + real delegation + per-node panels** ✅
 - **Phase 4 — Tools + memory (mock data, real interface & events)** ✅ core
+- **Agent framework — CrewAI hierarchical crew (real when keyed)** ✅
 - Phase 5 — Real MCP wire protocol / connectors (Gmail/Calendar/Drive),
   auth on the dashboard, richer error surfacing *(partial: retries, reconnect,
   error node states, and task persistence are already in)*

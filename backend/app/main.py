@@ -14,10 +14,10 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
 from .broadcaster import broadcaster
+from .crew import CrewOrchestrator
 from .fake_loop import fake_event_loop
 from .llm import get_provider
 from .nodes import load_nodes_config
-from .orchestrator import Orchestrator
 from .tasks import store
 
 app = FastAPI(title="AI Orchestrator Dashboard — Backend", version="0.1.0")
@@ -33,7 +33,8 @@ app.add_middleware(
 )
 
 _loop_task: asyncio.Task | None = None
-orchestrator = Orchestrator(broadcaster)
+# CrewAI when a real key is present; custom offline orchestrator otherwise.
+orchestrator = CrewOrchestrator(broadcaster)
 
 
 @app.on_event("startup")
@@ -58,7 +59,7 @@ async def _shutdown() -> None:
 async def health() -> dict:
     prov = get_provider()
     return {"ok": True, "phase": 3, "llm": prov.name, "llm_real": prov.is_real,
-            "busy": orchestrator.busy}
+            "engine": orchestrator.engine, "busy": orchestrator.busy}
 
 
 class TaskRequest(BaseModel):
