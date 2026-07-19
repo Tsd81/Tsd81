@@ -9,12 +9,16 @@ import asyncio
 import contextlib
 import os
 
-from fastapi import FastAPI, WebSocket, WebSocketDisconnect
+from fastapi import FastAPI, HTTPException, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel
 
 from .broadcaster import broadcaster
 from .fake_loop import fake_event_loop
+from .llm import get_provider
 from .nodes import load_nodes_config
+from .orchestrator import Orchestrator
+from .tasks import store
 
 app = FastAPI(title="AI Orchestrator Dashboard — Backend", version="0.1.0")
 
@@ -29,13 +33,15 @@ app.add_middleware(
 )
 
 _loop_task: asyncio.Task | None = None
+orchestrator = Orchestrator(broadcaster)
 
 
 @app.on_event("startup")
 async def _startup() -> None:
     global _loop_task
-    # Phase 0 driver. Disable with FAKE_LOOP=0 once the real orchestrator lands.
-    if os.getenv("FAKE_LOOP", "1") != "0":
+    # Demo mode replays fake lifecycle events so the graph is lively with no
+    # task submitted. Off by default now that the real orchestrator exists.
+    if os.getenv("DEMO_MODE", "0") == "1":
         _loop_task = asyncio.create_task(fake_event_loop())
 
 
@@ -50,7 +56,41 @@ async def _shutdown() -> None:
 
 @app.get("/api/health")
 async def health() -> dict:
-    return {"ok": True, "phase": 0}
+    prov = get_provider()
+    return {"ok": True, "phase": 3, "llm": prov.name, "llm_real": prov.is_real,
+            "busy": orchestrator.busy}
+
+
+class TaskRequest(BaseModel):
+    text: str
+
+
+@app.post("/api/task")
+async def create_task(req: TaskRequest) -> dict:
+    """Submit a request → manager delegates to role agents → real answer.
+    Emits the full contract event stream, so the graph reflects the run."""
+    text = (req.text or "").strip()
+    if not text:
+        raise HTTPException(status_code=400, detail="text is required")
+    if orchestrator.busy:
+        raise HTTPException(status_code=409, detail="orchestrator busy; try again shortly")
+    try:
+        return await orchestrator.run_task(text)
+    except Exception as exc:
+        raise HTTPException(status_code=500, detail=str(exc))
+
+
+@app.get("/api/tasks")
+async def list_tasks() -> dict:
+    return {"tasks": store.list()}
+
+
+@app.get("/api/tasks/{task_id}")
+async def get_task(task_id: str) -> dict:
+    detail = store.detail(task_id)
+    if not detail:
+        raise HTTPException(status_code=404, detail="task not found")
+    return detail
 
 
 @app.get("/api/nodes")

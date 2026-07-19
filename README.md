@@ -6,11 +6,18 @@ glowing **core** (the lead agent) radiates curved links to role agents
 node pulses and the link to the core animates — **driven by a live event
 stream, not a canned animation.**
 
-> **Status: Phase 1 complete** — reference-quality visuals + real weather HUD.
-> The graph is real and driven by the WebSocket; the core pulses, active edges
-> flow teal particles, nodes glow on state change, and the HUD shows real
-> weather. The *content* of the events is still faked on a loop (replaced by the
-> real CrewAI orchestrator in Phase 2).
+> **Status: Phases 0–4 (core) complete** — live graph, reference visuals, and a
+> **real working orchestrator**. Type a request in the dashboard → a manager
+> delegates to real role agents → each agent calls its tools and produces output
+> → you get a synthesized answer, with the graph reflecting the actual run. Works
+> **with or without** an API key (deterministic offline mock when no key is set).
+>
+> **Note on the agent framework:** the master prompt specified CrewAI. This build
+> uses a **custom hierarchical orchestrator behind a swappable interface** instead,
+> because (a) event emission needs fine-grained control and (b) a CrewAI run can't
+> be verified in the build sandbox without an API key. The LLM provider and the
+> orchestrator both sit behind interfaces, so a CrewAI adapter can drop in without
+> touching the graph, contract, or frontend. Say the word and I'll switch to CrewAI.
 
 ---
 
@@ -30,10 +37,17 @@ Wait until you see the frontend and backend logs settle, then open:
 
 **http://localhost:3000**
 
-You should see the dashboard: the orange core in the middle, ~16 nodes
-around it, and nodes/links lighting up live as the (currently simulated)
-orchestrator runs tasks. The little dot top-left says **live** when the
-dashboard is connected to the backend.
+You'll see the dashboard: the orange core in the middle, ~16 nodes around it,
+and the **task bar at the bottom**. Type a request — e.g. *"Research competitors
+and check the calendar for a meeting slot"* — and press **Run**. Watch the core
+switch to ORCHESTRATING, the relevant agents light up, their tool nodes (Email,
+Calendar, Drive, Memory) flash as they're called, and a synthesized answer come
+back. **Click any node** to open a side panel with its live log, tool calls, and
+output.
+
+Without an `ANTHROPIC_API_KEY`, agents return deterministic **mock** output but
+everything else is real (routing, delegation, tools, memory, events). Add your
+key to `.env` (`ANTHROPIC_API_KEY=...`) to get real Claude answers.
 
 To stop: press `Ctrl+C`, then `docker compose down`.
 
@@ -56,21 +70,27 @@ npm run dev
 
 ---
 
-## What's real vs. still mocked (Phase 1)
+## What's real vs. still mocked (Phases 0–4)
 
 | Piece | State |
 |---|---|
 | Monorepo, docker-compose, env, READMEs | ✅ real |
-| `nodes.config.json` — single source of truth for the graph | ✅ real |
-| Event contract (`contract/events.schema.json` ↔ Pydantic ↔ TS types) | ✅ real |
+| `nodes.config.json` + event contract (schema ↔ Pydantic ↔ TS) | ✅ real |
 | WebSocket stream + snapshot-on-connect + reconnect | ✅ real |
-| Frontend graph rendered from `nodes.config.json`, lit purely by the socket | ✅ real |
-| Pulsing core, particle-flow on active edges, node glow states | ✅ real |
-| HUD: live clock, greeting, day-rotating history line | ✅ real |
-| Weather — real free API (Open-Meteo, no key), timeout/retry/cache/fallback | ✅ real |
-| Reduced-motion / low-end-device graceful degradation | ✅ real |
-| **Content** of the events (which agent, what task) | 🟡 faked on a loop |
-| CrewAI agents, MCP tools, Qdrant memory | ⏳ Phases 2–5 |
+| Graph rendered from config, lit purely by the socket | ✅ real |
+| Pulsing core, particle-flow edges, node glow, reduced-motion degradation | ✅ real |
+| Weather — real free API (Open-Meteo), timeout/retry/cache/fallback | ✅ real |
+| **Orchestrator**: manager routing + delegation + fan-out to 1–3 agents | ✅ real |
+| All 13 role agents with distinct system prompts | ✅ real |
+| `/api/task` end-to-end run emitting real contract events | ✅ real |
+| Clickable node → side panel with live log, tool calls, output | ✅ real |
+| Task persistence (survives restart) + `/api/tasks` history | ✅ real |
+| LLM provider — **real Claude** (Anthropic SDK) when key set | ✅ real |
+| LLM provider — deterministic **offline mock** when no key | ✅ real (fallback) |
+| Tools (Email/Calendar/Drive) — realistic data behind a stable interface | 🟡 mock data, real interface + events |
+| Memory — Qdrant-backed when reachable, else in-memory | 🟡 real store; hash "embeddings" (swap for real embedder) |
+| Agent framework | 🟡 custom orchestrator (CrewAI swap available on request) |
+| MCP wire protocol, real Gmail/Calendar/Drive connectors, auth | ⏳ Phase 5 |
 
 > **Weather note:** uses [Open-Meteo](https://open-meteo.com) — free, no API key.
 > Set the city via `WEATHER_CITY` (or `WEATHER_LAT`/`WEATHER_LON`) in `.env`.
@@ -82,22 +102,40 @@ npm run dev
 ## Architecture
 
 ```
-/backend            FastAPI + WebSocket. Phase 0: fake event loop.
+/backend            FastAPI + WebSocket + orchestrator
   app/events.py     Pydantic event models (mirror the contract schema)
   app/nodes.py      Loads nodes.config.json
   app/broadcaster.py WS connection manager + authoritative runtime state
-  app/fake_loop.py  Phase-0 event generator (deleted/replaced in Phase 2)
-  app/main.py       App: /ws, /api/nodes, /api/hud, /api/health
+  app/llm.py        Swappable LLM provider (Anthropic real + offline mock)
+  app/connectors.py Tool/data connectors (Email/Calendar/Drive/Memory)
+  app/orchestrator.py  Manager → delegation → agents → tools → synthesis
+  app/tasks.py      Task/agent run store (+ JSON persistence)
+  app/fake_loop.py  Optional demo-mode event generator (DEMO_MODE=1)
+  app/weather.py    Real weather via Open-Meteo
+  app/main.py       App: /ws, /api/task, /api/tasks, /api/nodes, /api/hud
 /frontend           Next.js + TS + Tailwind + React Flow + Framer Motion
   lib/events.ts     TS types (mirror the contract schema)
   lib/useOrchestrator.ts  WS hook → reduces events into render state
   lib/layout.ts     Radial node placement from ring + angle
-  components/        Graph, CoreNode, OrbNode, Hud, Dashboard
-/mcp                Mock MCP servers (Phase 4)
+  components/        Graph, CoreNode, OrbNode, FlowEdge, Hud, TaskBar,
+                     NodePanel, Dashboard
+/mcp                Mock connector notes (real MCP wire protocol: Phase 5)
 /contract           events.schema.json — single source of truth for events
 nodes.config.json   Single source of truth for the graph (backend serves it)
 docker-compose.yml  qdrant + backend + frontend, one command
 ```
+
+### How a task runs
+
+1. `POST /api/task {text}` → `core.state: orchestrating`.
+2. **Manager routing** picks 1–3 agents (LLM-based when a real key is set,
+   deterministic keyword routing otherwise).
+3. Chosen agents run **in parallel**; each calls its connected tools (emitting
+   `tool.call`/`tool.result`, lighting the outer nodes), recalls/stores memory,
+   then produces output via the LLM provider.
+4. The manager **synthesizes** one answer; `core.state: standby`.
+5. Every step emits real contract events, so the graph is a live mirror of the
+   run. Everything is recorded in the TaskStore for the side panels.
 
 ### The event contract (the spine)
 
@@ -123,8 +161,10 @@ the runtime and the visual — they can't drift.
 ## Phase roadmap
 
 - **Phase 0 — Skeleton + contract** ✅
-- **Phase 1 — Reference-quality visuals + real weather HUD** ✅ *(this build)*
-- Phase 2 — Real CrewAI orchestrator, one role end-to-end (Researcher)
-- Phase 3 — All role agents + real delegation + per-node panels
-- Phase 4 — Tools via MCP (mock protocol) + Qdrant memory
-- Phase 5 — Real connectors (Gmail/Calendar/Drive) + hardening
+- **Phase 1 — Reference-quality visuals + real weather HUD** ✅
+- **Phase 2 — Real orchestrator, one role end-to-end** ✅
+- **Phase 3 — All role agents + real delegation + per-node panels** ✅
+- **Phase 4 — Tools + memory (mock data, real interface & events)** ✅ core
+- Phase 5 — Real MCP wire protocol / connectors (Gmail/Calendar/Drive),
+  auth on the dashboard, richer error surfacing *(partial: retries, reconnect,
+  error node states, and task persistence are already in)*

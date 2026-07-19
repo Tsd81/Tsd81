@@ -23,9 +23,10 @@ const edgeTypes = { flow: FlowEdge };
 interface GraphProps {
   cfg: NodesConfig;
   state: OrchestratorState;
+  onNodeClick?: (id: string) => void;
 }
 
-export function Graph({ cfg, state }: GraphProps) {
+export function Graph({ cfg, state, onNodeClick }: GraphProps) {
   const placed = useMemo(() => placeNodes(cfg), [cfg]);
 
   // Static edge skeleton: core→inner agents, tools→their connected agents.
@@ -90,6 +91,7 @@ export function Graph({ cfg, state }: GraphProps) {
       edges={rfEdges}
       nodeTypes={nodeTypes}
       edgeTypes={edgeTypes}
+      onNodeClick={(_, n) => onNodeClick?.(n.id)}
       fitView
       fitViewOptions={{ padding: 0.2 }}
       minZoom={0.3}

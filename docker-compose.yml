@@ -19,10 +19,13 @@ services:
       CORS_ORIGINS: http://localhost:3000
       WEATHER_CITY: ${WEATHER_CITY:-Sofia}
       ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
-      MODEL: ${MODEL:-claude-sonnet-4-6}
+      MODEL: ${MODEL:-claude-sonnet-4-5}
       QDRANT_URL: http://qdrant:6333
+      TASKS_PERSIST_PATH: /data/tasks.json
+      DEMO_MODE: ${DEMO_MODE:-0}
     volumes:
       - ./nodes.config.json:/config/nodes.config.json:ro
+      - backend_data:/data
     depends_on:
       - qdrant
     restart: unless-stopped
@@ -41,3 +44,4 @@ services:
 
 volumes:
   qdrant_data:
+  backend_data:
