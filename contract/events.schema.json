@@ -1,0 +1,120 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://orchestrator.local/contract/events.schema.json",
+  "title": "Orchestrator Event Contract",
+  "description": "Single source of truth for the WebSocket event stream. Pydantic models (backend/app/events.py) and TS types (frontend/lib/events.ts) mirror this file. When this changes, update both.",
+  "definitions": {
+    "AgentState": { "enum": ["idle", "thinking", "working", "done", "error"] },
+    "CoreState": { "enum": ["standby", "orchestrating"] },
+    "TaskState": { "enum": ["running", "done", "failed"] },
+    "LogLevel": { "enum": ["info", "warn", "error"] }
+  },
+  "oneOf": [
+    {
+      "title": "agent.status",
+      "type": "object",
+      "required": ["type", "node", "state", "ts"],
+      "properties": {
+        "type": { "const": "agent.status" },
+        "node": { "type": "string" },
+        "state": { "$ref": "#/definitions/AgentState" },
+        "ts": { "type": "integer" }
+      }
+    },
+    {
+      "title": "tool.call",
+      "type": "object",
+      "required": ["type", "node", "action", "ts"],
+      "properties": {
+        "type": { "const": "tool.call" },
+        "node": { "type": "string" },
+        "action": { "type": "string" },
+        "summary": { "type": "string" },
+        "ts": { "type": "integer" }
+      }
+    },
+    {
+      "title": "tool.result",
+      "type": "object",
+      "required": ["type", "node", "action", "ok", "ts"],
+      "properties": {
+        "type": { "const": "tool.result" },
+        "node": { "type": "string" },
+        "action": { "type": "string" },
+        "ok": { "type": "boolean" },
+        "summary": { "type": "string" },
+        "ts": { "type": "integer" }
+      }
+    },
+    {
+      "title": "edge.active",
+      "type": "object",
+      "required": ["type", "from", "to", "on", "ts"],
+      "properties": {
+        "type": { "const": "edge.active" },
+        "from": { "type": "string" },
+        "to": { "type": "string" },
+        "on": { "type": "boolean" },
+        "ts": { "type": "integer" }
+      }
+    },
+    {
+      "title": "task.created",
+      "type": "object",
+      "required": ["type", "id", "title", "assignee", "ts"],
+      "properties": {
+        "type": { "const": "task.created" },
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "assignee": { "type": "string" },
+        "ts": { "type": "integer" }
+      }
+    },
+    {
+      "title": "task.update",
+      "type": "object",
+      "required": ["type", "id", "state", "ts"],
+      "properties": {
+        "type": { "const": "task.update" },
+        "id": { "type": "string" },
+        "state": { "$ref": "#/definitions/TaskState" },
+        "output": { "type": "string" },
+        "ts": { "type": "integer" }
+      }
+    },
+    {
+      "title": "core.state",
+      "type": "object",
+      "required": ["type", "state", "ts"],
+      "properties": {
+        "type": { "const": "core.state" },
+        "state": { "$ref": "#/definitions/CoreState" },
+        "ts": { "type": "integer" }
+      }
+    },
+    {
+      "title": "log",
+      "type": "object",
+      "required": ["type", "level", "msg", "ts"],
+      "properties": {
+        "type": { "const": "log" },
+        "level": { "$ref": "#/definitions/LogLevel" },
+        "msg": { "type": "string" },
+        "node": { "type": "string" },
+        "ts": { "type": "integer" }
+      }
+    },
+    {
+      "title": "snapshot",
+      "type": "object",
+      "required": ["type", "core", "nodes", "edges", "ts"],
+      "properties": {
+        "type": { "const": "snapshot" },
+        "core": { "$ref": "#/definitions/CoreState" },
+        "nodes": { "type": "object", "additionalProperties": { "$ref": "#/definitions/AgentState" } },
+        "edges": { "type": "array", "items": { "type": "object" } },
+        "ts": { "type": "integer" }
+      }
+    }
+  ]
+}

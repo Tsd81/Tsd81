@@ -1,0 +1,28 @@
+{
+  "version": 1,
+  "core": {
+    "id": "core",
+    "label": "Lead Agent",
+    "type": "manager"
+  },
+  "nodes": [
+    { "id": "strategist",     "label": "Strategist",     "ring": "inner", "type": "agent", "angle": 0,   "role": "Long-term planning, prioritization, framing of objectives." },
+    { "id": "researcher",     "label": "Researcher",     "ring": "inner", "type": "agent", "angle": 28,  "role": "Gathers, verifies and synthesizes information." },
+    { "id": "chief_of_staff", "label": "Chief of Staff", "ring": "inner", "type": "agent", "angle": 55,  "role": "Coordinates agendas, follow-ups, and cross-agent handoffs." },
+    { "id": "sales",          "label": "Sales",          "ring": "inner", "type": "agent", "angle": 83,  "role": "Outreach, pipeline, deal qualification." },
+    { "id": "developer",      "label": "Developer",      "ring": "inner", "type": "agent", "angle": 111, "role": "Writes and reviews code, technical implementation." },
+    { "id": "ops",            "label": "Ops",            "ring": "inner", "type": "agent", "angle": 138, "role": "Process, logistics, scheduling, execution." },
+    { "id": "analytics",      "label": "Analytics",      "ring": "inner", "type": "agent", "angle": 166, "role": "Metrics, reporting, quantitative insight." },
+    { "id": "social",         "label": "Social",         "ring": "inner", "type": "agent", "angle": 194, "role": "Social presence, content distribution, community." },
+    { "id": "crm",            "label": "CRM Agent",      "ring": "inner", "type": "agent", "angle": 221, "role": "Contact and relationship management." },
+    { "id": "engineering",    "label": "Engineering",    "ring": "inner", "type": "agent", "angle": 249, "role": "Systems/architecture, infrastructure design." },
+    { "id": "design",         "label": "Design",         "ring": "inner", "type": "agent", "angle": 277, "role": "Visual and UX design, brand." },
+    { "id": "editor",         "label": "Editor",         "ring": "inner", "type": "agent", "angle": 304, "role": "Writing, proofreading, content polish." },
+    { "id": "finance",        "label": "Finance",        "ring": "inner", "type": "agent", "angle": 332, "role": "Budgeting, costs, financial analysis." },
+
+    { "id": "email",    "label": "Email",    "ring": "outer", "type": "tool", "angle": 35,  "mcp": "email",    "connects": ["chief_of_staff", "sales", "crm"] },
+    { "id": "calendar", "label": "Calendar", "ring": "outer", "type": "tool", "angle": 125, "mcp": "calendar", "connects": ["chief_of_staff", "ops"] },
+    { "id": "drive",    "label": "Drive",    "ring": "outer", "type": "tool", "angle": 215, "mcp": "drive",    "connects": ["researcher", "editor", "design"] },
+    { "id": "memory",   "label": "Memory",   "ring": "outer", "type": "tool", "angle": 305, "mcp": "memory",   "connects": ["researcher", "strategist", "analytics"] }
+  ]
+}
