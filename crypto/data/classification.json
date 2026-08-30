@@ -1,0 +1,29 @@
+{
+  "_note": "Класификация по РАЗДЕЛ 1.1 от методиката. Ключ = CoinGecko id. Непознат актив се класифицира автоматично като G (непроверен/нов) и се маркира за ръчна проверка.",
+  "_classes": {
+    "A": "Монетарни",
+    "B": "Инфраструктурни L1/L2",
+    "C": "Приложни с приходи",
+    "D": "Стабилни/обвързани",
+    "E": "Борсови токени",
+    "F": "Меме/наративни",
+    "G": "Непроверени/нови"
+  },
+  "map": {
+    "bitcoin": "A", "monero": "A", "zcash": "A", "litecoin": "A", "bitcoin-cash": "A",
+    "ethereum": "B", "solana": "B", "binancecoin": "B", "tron": "B", "cardano": "B",
+    "avalanche-2": "B", "sui": "B", "near": "B", "hedera-hashgraph": "B", "the-open-network": "B",
+    "crypto-com-chain": "B", "mantle": "B", "ripple": "B", "stellar": "B", "polkadot": "B",
+    "bittensor": "B", "internet-computer": "B", "aptos": "B", "cosmos": "B", "algorand": "B",
+    "hyperliquid": "C", "uniswap": "C", "aave": "C", "chainlink": "C", "ondo-finance": "C",
+    "pump-fun": "C", "litentry": "C", "ethena": "C", "jupiter-exchange-solana": "C", "maker": "C",
+    "tether": "D", "usd-coin": "D", "usds": "D", "dai": "D", "usd1-wlfi": "D",
+    "ethena-usde": "D", "global-dollar": "D", "paypal-usd": "D", "ripple-usd": "D",
+    "tether-gold": "D", "first-digital-usd": "D", "true-usd": "D", "pax-gold": "D",
+    "blackrock-usd-institutional-digital-liquidity-fund": "D", "sky-dollar": "D",
+    "whitebit": "E", "leo-token": "E", "okb": "E", "bitget-token": "E", "kucoin-shares": "E",
+    "dogecoin": "F", "shiba-inu": "F", "memecore": "F", "official-trump": "F",
+    "world-liberty-financial": "F", "pepe": "F", "bonk": "F",
+    "canton-coin": "G", "rain": "G"
+  }
+}

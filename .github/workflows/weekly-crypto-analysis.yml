@@ -1,0 +1,103 @@
+name: Седмичен крипто мониторинг (топ 40)
+
+# ВАЖНО: GitHub задейства `schedule` САМО от основната ветка на хранилището.
+# Докато този файл живее във feature ветка, cron-ът няма да се пуска — използвай
+# ръчния пуск (workflow_dispatch) или седмичната Claude сесия (Routine).
+# Часът е нарочно 06:07 UTC, а не кръгъл час, за да не съвпада с пиковото
+# натоварване на публичния API на CoinGecko.
+
+on:
+  schedule:
+    - cron: "7 6 * * 1"   # всеки понеделник, 06:07 UTC
+  workflow_dispatch:
+    inputs:
+      snapshot_date:
+        description: "Дата на снимката (YYYY-MM-DD). Празно = днес."
+        required: false
+        type: string
+      top_n:
+        description: "Брой активи"
+        required: false
+        default: "40"
+        type: string
+
+permissions:
+  contents: write
+
+concurrency:
+  group: weekly-crypto-analysis
+  cancel-in-progress: false
+
+jobs:
+  izdanie:
+    name: Събиране на данни и чернова на изданието
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Изтегляне на хранилището
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+          fetch-depth: 0
+
+      - name: Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Регресионен тест на конвейера
+        # Пуска се ПРЕДИ събирането на данни: ако логиката е счупена, не искаме
+        # да запишем издание, което после да чистим на ръка.
+        run: python3 crypto/scripts/selftest.py
+
+      - name: Събиране на пазарните данни
+        env:
+          COINGECKO_API_KEY: ${{ secrets.COINGECKO_API_KEY }}
+          COINGECKO_PLAN: ${{ vars.COINGECKO_PLAN || 'demo' }}
+        run: |
+          python3 crypto/scripts/fetch_market_data.py \
+            --top "${{ inputs.top_n || '40' }}" \
+            ${{ inputs.snapshot_date && format('--date {0}', inputs.snapshot_date) || '' }}
+
+      - name: Чернова на седмичното издание
+        run: python3 crypto/scripts/build_edition.py
+
+      - name: Записване на промените
+        run: |
+          set -euo pipefail
+          if git diff --quiet -- crypto/; then
+            echo "Няма промени за записване."
+            exit 0
+          fi
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add crypto/
+          SNAPSHOT_DATE="$(python3 -c "import json,glob; print(json.load(open(sorted(glob.glob('crypto/data/snapshots/*.json'))[-1]))['meta']['snapshot_date'])")"
+          git commit -m "Крипто топ 40: чернова на изданието за ${SNAPSHOT_DATE}
+
+          Автоматично събрани пазарни данни и количествен анализ.
+          Проверката на информацията по РАЗДЕЛ 2 остава за ръчно попълване
+          (местата са маркирани със [ЗА ПОПЪЛВАНЕ])."
+
+          for opit in 1 2 3 4; do
+            if git push origin "HEAD:${{ github.ref_name }}"; then
+              exit 0
+            fi
+            echo "Push не успя (опит ${opit}). Обновявам и пробвам пак."
+            sleep $((2 ** opit))
+            git pull --rebase origin "${{ github.ref_name }}" || true
+          done
+          echo "Push не успя след 4 опита." >&2
+          exit 1
+
+      - name: Какво остава за ръчна работа
+        if: always()
+        run: |
+          echo "### Седмично издание — статус" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          BROI="$(grep -c '\[ЗА ПОПЪЛВАНЕ\]' crypto/CRYPTO-TOP40-MONITORING.md || true)"
+          echo "Количествената част е готова. Остават **${BROI}** места [ЗА ПОПЪЛВАНЕ] —" >> "$GITHUB_STEP_SUMMARY"
+          echo "проверката на новините по РАЗДЕЛ 2, рейтингите за достоверност и изводите." >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "Промптът за тази стъпка: \`crypto/prompts/sedmichen-analiz.md\`" >> "$GITHUB_STEP_SUMMARY"
