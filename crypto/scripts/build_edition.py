@@ -18,7 +18,7 @@ from __future__ import annotations
 import argparse
 import re
 import sys
-from datetime import date, datetime, timedelta
+from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
@@ -366,6 +366,46 @@ def build_edition(result: dict, snap_date: date, week_label: str) -> str:
 """
 
 
+def build_no_data_edition(snap_date: date, week_label: str, reason: str) -> str:
+    """Издание за седмица, в която пазарните данни НЕ са били събрани.
+
+    Съществува, защото мълчаливото пропускане е по-опасно от липсващ отчет:
+    празнина в РАЗДЕЛ 3 изглежда като спокойна седмица. Липсата на данни е
+    резултат, който се записва (РАЗДЕЛ 6, т.6).
+    """
+    iso = snap_date.strftime("%G-W%V")
+    return f"""<!-- EDITION:{iso} -->
+---
+
+# 📅 СЕДМИЦА {week_label} — {week_range(snap_date)}
+
+**Дата на опита за снимка:** {snap_date.strftime('%d.%m.%Y')}
+**Статус:** ⛔ **ДАННИТЕ ЗА СЕДМИЦАТА НЕ СА СЪБРАНИ.** Изданието е непълно.
+
+## 3.1–3.7. Не са изготвени
+
+Пазарните данни не бяха достъпни, а без тях таблицата на топ 40, съотношенията
+и структурните сигнали не могат да бъдат изчислени. **Нищо в тези раздели не е
+попълнено по преценка или по памет** — това би нарушило РАЗДЕЛ 6, т.4.
+
+## 3.8. Какво НЕ беше възможно да се провери
+
+**Причина за липсата на данни:**
+
+{reason}
+
+**Последици за времевите редове:**
+
+- РАЗДЕЛ 4.1 няма ред за тази седмица — прекъсване в ценовата серия.
+- Сравненията „спрямо предходната седмица“ в следващото издание ще прескочат
+  тази точка. Промените ще изглеждат по-големи, защото покриват две седмици.
+- Отворените твърдения в дневника на достоверността (4.3) остават непроверени
+  за още една седмица.
+
+**Какво трябва да се направи:** виж РАЗДЕЛ 0, „Ако седмичният пуск не събере данни“.
+"""
+
+
 def timeseries_price_row(result: dict, week_label: str, snap_date: date) -> str:
     by_symbol = {c["symbol"]: c for c in result["coins"]}
     cells = []
@@ -394,6 +434,10 @@ def timeseries_rank_row(result: dict, week_label: str) -> str:
 
 # ------------------------------------------------------- вмъкване
 
+def no_data_rank_row(week_label: str) -> str:
+    return f"| {week_label} | — | — | ⛔ данните за седмицата не са събрани |"
+
+
 def splice(text: str, marker: str, payload: str, *, prepend: bool) -> str:
     start, end = f"<!-- {marker}:START -->", f"<!-- {marker}:END -->"
     pattern = re.compile(re.escape(start) + r"\n(.*?)" + re.escape(end), re.DOTALL)
@@ -406,13 +450,30 @@ def splice(text: str, marker: str, payload: str, *, prepend: bool) -> str:
 
 
 def drop_existing_edition(text: str, iso_week: str) -> str:
-    """Маха предишна чернова за същата седмица, за да е идемпотентен пускът."""
+    """Маха предишна чернова за същата седмица, за да е идемпотентен пускът.
+
+    Всяко издание ЗАДЪЛЖИТЕЛНО започва с маркер `<!-- EDITION:<ISO> -->`; той е
+    единственото, което очертава границите му. Ако издание остане без маркер,
+    изтриването на съседното би погълнало и него — затова тук се проверява, че
+    отрязаният текст не съдържа чуждо заглавие, и се отказва, ако съдържа.
+    """
     marker = f"<!-- EDITION:{iso_week} -->"
     if marker not in text:
         return text
     start = text.index(marker)
     nxt = text.find("<!-- EDITION:", start + len(marker))
     end = nxt if nxt != -1 else text.index("<!-- EDITIONS:END -->")
+
+    removed = text[start:end]
+    headings = re.findall(r"^# 📅 СЕДМИЦА .+$", removed, re.MULTILINE)
+    if len(headings) > 1:
+        raise SystemExit(
+            f"ГРЕШКА: изданието за {iso_week} граничи с издание без маркер "
+            f"<!-- EDITION:… -->. Презаписването би изтрило и него:\n  "
+            + "\n  ".join(headings[1:])
+            + "\nДобави маркер на всяко издание в РАЗДЕЛ 3 и пусни отново."
+        )
+
     print(f"  · Съществуващо издание за {iso_week} се презаписва.")
     return text[:start] + text[end:]
 
@@ -430,15 +491,59 @@ def drop_existing_row(text: str, marker: str, label: str) -> str:
     return text[: match.start()] + f"{start}\n{body}{end}" + text[match.end():]
 
 
+def write_no_data(args) -> int:
+    """Записва издание за седмица без данни. Винаги оставя следа."""
+    if not args.reason:
+        print("ГРЕШКА: --no-data изисква --reason с конкретната причина.", file=sys.stderr)
+        return 2
+
+    snap_date = (
+        datetime.strptime(args.date, "%Y-%m-%d").date() if args.date
+        else datetime.now(timezone.utc).date()
+    )
+    week_label = iso_week_label(snap_date)
+    edition = build_no_data_edition(snap_date, week_label, args.reason.strip())
+
+    if args.dry_run:
+        print(edition)
+        return 0
+
+    text = MASTER.read_text(encoding="utf-8")
+    text = drop_existing_edition(text, snap_date.strftime("%G-W%V"))
+    text = drop_existing_row(text, "TS-RANKS", week_label)
+    text = splice(text, "EDITIONS", edition, prepend=True)
+    text = splice(text, "TS-RANKS", no_data_rank_row(week_label), prepend=False)
+    text = re.sub(
+        r"\*\*Последна актуализация:\*\* .*",
+        f"**Последна актуализация:** {snap_date.strftime('%d.%m.%Y')} (без данни)",
+        text, count=1,
+    )
+    MASTER.write_text(text, encoding="utf-8")
+
+    print(f"✓ Записано издание БЕЗ ДАННИ за {week_label}.")
+    print("→ Празнината е отбелязана в РАЗДЕЛ 3 и в РАЗДЕЛ 4.2, вместо да бъде премълчана.")
+    return 0
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description="Изгражда седмичното издание в master файла")
     ap.add_argument("--snapshot", default=None, help="път до снимка (по подразбиране най-новата)")
     ap.add_argument("--dry-run", action="store_true", help="печата изданието, без да пипа файла")
+    ap.add_argument("--no-data", action="store_true",
+                    help="записва издание, отбелязващо че данните не са били събрани")
+    ap.add_argument("--reason", default=None, help="причина за липсата на данни (с --no-data)")
+    ap.add_argument("--date", default=None, help="дата на изданието YYYY-MM-DD (с --no-data)")
     args = ap.parse_args()
+
+    if args.no_data:
+        return write_no_data(args)
 
     snap_path = Path(args.snapshot) if args.snapshot else analysis.latest_snapshot_path()
     if not snap_path or not snap_path.exists():
         print("ГРЕШКА: няма налична снимка. Пусни първо fetch_market_data.py.", file=sys.stderr)
+        print("Ако събирането на данни се е провалило, НЕ оставяй седмицата празна — запиши следа:",
+              file=sys.stderr)
+        print('  python3 crypto/scripts/build_edition.py --no-data --reason "..."', file=sys.stderr)
         return 1
 
     snapshot = analysis.load_snapshot(snap_path)

@@ -234,6 +234,61 @@ def run() -> int:
         failures += not check("редът в 4.1 не се дублира", text2.count(price_label) == 1)
         failures += not check("редът в 4.2 не се дублира", text2.count(f"| {wlabel} |") == 1)
 
+        print("\n7) Издание при липса на данни")
+        from datetime import date as _date
+        nd_date = _date(2026, 9, 7)
+        nd_week = build_edition.iso_week_label(nd_date)
+
+        class _Args:
+            no_data, dry_run = True, False
+            reason = "Мрежовата политика на средата блокира достъпа до пазарния API."
+            date = nd_date.isoformat()
+
+        rc_nd = build_edition.write_no_data(_Args())
+        failures += not check("write_no_data завършва успешно", rc_nd == 0)
+
+        nd_text = master.read_text(encoding="utf-8")
+        failures += not check("празната седмица оставя издание",
+                              f"<!-- EDITION:{nd_date.strftime('%G-W%V')} -->" in nd_text)
+        failures += not check("статусът е недвусмислен",
+                              "ДАННИТЕ ЗА СЕДМИЦАТА НЕ СА СЪБРАНИ" in nd_text)
+        failures += not check("причината е записана", "Мрежовата политика" in nd_text)
+        failures += not check("празнината е отбелязана и в 4.2",
+                              f"| {nd_week} | — | — | ⛔" in nd_text)
+        failures += not check("предходните издания са запазени",
+                              f"<!-- EDITION:{iso} -->" in nd_text and "Cypherpunk" in nd_text)
+
+        build_edition.write_no_data(_Args())
+        nd_text2 = master.read_text(encoding="utf-8")
+        failures += not check("повторният пуск не дублира празното издание",
+                              nd_text2.count(f"<!-- EDITION:{nd_date.strftime('%G-W%V')} -->") == 1)
+
+        class _ArgsNoReason(_Args):
+            reason = None
+        failures += not check("--no-data без причина се отказва",
+                              build_edition.write_no_data(_ArgsNoReason()) == 2)
+
+        print("\n8) Защита срещу изтриване на издание без маркер")
+        guarded = master.read_text(encoding="utf-8")
+        failures += not check("всяко издание в РАЗДЕЛ 3 носи маркер",
+                              guarded.count("# 📅 СЕДМИЦА") == guarded.count("<!-- EDITION:"),
+                              f"{guarded.count('# 📅 СЕДМИЦА')} заглавия срещу "
+                              f"{guarded.count('<!-- EDITION:')} маркера")
+
+        # Симулира издание, останало без маркер: изтриването на съседното би го погълнало.
+        broken = guarded.replace("<!-- EDITION:2026-W35 -->\n", "", 1)
+        # Взима изданието НЕПОСРЕДСТВЕНО преди немаркираното — само неговото
+        # изтриване би погълнало съседа.
+        tail = broken[broken.rindex("<!-- EDITION:"):]
+        target_iso = tail[len("<!-- EDITION:"):tail.index(" -->")]
+        try:
+            build_edition.drop_existing_edition(broken, target_iso)
+            failures += not check("немаркирано издание спира презаписа", False,
+                                  "не беше вдигната грешка")
+        except SystemExit as exc:
+            failures += not check("немаркирано издание спира презаписа",
+                                  "без маркер" in str(exc), str(exc)[:80])
+
         print("\n6) Идемпотентност на историята")
         snap = make_snapshot(weeks[-1][0], 1.00, 3.5)
         fetcher.append_history(snap["coins"], weeks[-1][0].isoformat(), "повторен пуск")
