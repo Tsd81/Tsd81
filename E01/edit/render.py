@@ -32,8 +32,19 @@ for i, it in enumerate(tl):
     common = ["-r", str(FPS), "-c:v", "libx264", "-preset", "veryfast", "-crf", "20", "-pix_fmt", "yuv420p", "-an", "-t", f"{d:.3f}"]
     if it["kind"] == "gfx":
         img = os.path.join(GFX, it["name"] + ".png")
-        z = it.get("zoom", 0.04)
-        vf = (f"scale=3840:-1,zoompan=z='1+{z}*on/{n}':x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)':d={n}:s={W}x{H}:fps={FPS}")
+        z = it.get("zoom", 0.06)
+        mode = i % 4
+        if mode == 0:   # push in to centre
+            zx, xx, yy = f"1+{z}*on/{n}", "iw/2-(iw/zoom/2)", "ih/2-(ih/zoom/2)"
+        elif mode == 1: # pull out
+            zx, xx, yy = f"1+{z}-{z}*on/{n}", "iw/2-(iw/zoom/2)", "ih/2-(ih/zoom/2)"
+        elif mode == 2: # push in, drift right
+            zx, xx, yy = f"1+{z}*on/{n}", f"(iw-iw/zoom)*on/{n}", "ih/2-(ih/zoom/2)"
+        else:           # zoomed, drift left
+            zx, xx, yy = f"1+{z}", f"(iw-iw/zoom)*(1-on/{n})", "ih/2-(ih/zoom/2)"
+        fo = max(0.0, d - 0.35)
+        vf = (f"scale=3840:-1,zoompan=z='{zx}':x='{xx}':y='{yy}':d={n}:s={W}x{H}:fps={FPS},"
+              f"fade=t=in:st=0:d=0.35,fade=t=out:st={fo:.2f}:d=0.35")
         run(["ffmpeg", "-y", "-loglevel", "error", "-loop", "1", "-i", img, "-vf", vf, "-frames:v", str(n)] + common + [seg])
     else:
         src = os.path.join(NOAA, it["file"])
