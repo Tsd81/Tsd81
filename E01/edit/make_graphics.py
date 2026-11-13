@@ -25,7 +25,7 @@ def base():
 
 
 def source(d, text):
-    d.text((60, H - 56), text, font=F(MED, 22), fill=DIM)
+    d.text((60, H - 64), text, font=F(MED, 28), fill=(140, 168, 190))
 
 
 def title(d, text, sub=None, y=60):
