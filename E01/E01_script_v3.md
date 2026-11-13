@@ -173,11 +173,13 @@ The best way to find out: go back and measure the same lake again, over years. U
 ---
 
 ## Notes for edit (not narrated)
+- Open (minor, needs re-voicing s03 if fixed): "the team's leader, Sam Purkis" – UM calls him professor and chair; the paper lists him as first author. Safer: "the paper's lead author".
+- Open (minor, needs re-voicing s06): "Small creatures that end up in the brine…" repeats the previous sentences; "That alone makes these places worth studying" is filler.
 - Coarse layers: Discussion and Fig. 8 say ten; the Results text lists eight dated intervals. Script says "about ten".
 - Sections 00, 02, 03, 06, 08, 09, 10 re-voiced for v3 (9,664 credits); v2 audio kept in audio/v2/.
 - Radiocarbon: the paper reports the youngest coarse layer at 50 cal yr BP (Marine20, BP = before 1950 → ~1900 CE) and still calls it a match to 1995 ("~20 yr discrepancy"). The paper is internally inconsistent; the script only reports the authors' judgement.
 - Core length: paper gives both 150 cm (push depth, Fig. 7/8) and 135 cm (Methods, age model). Script says "more than a meter".
 - UM news says a four-week voyage; the paper says six weeks. Script follows the paper.
-- 0:00–1:05: no NOAA clip under any Aqaba number; own diagrams only (depth profile, 260 × 70 m outline, salinity bar 40 vs 160 PSU, layered core).
-- From 1:35 on: every NOAA clip carries an on-screen label, e.g. "Gulf of Mexico brine pool · NOAA Ocean Exploration · 2014".
+- 0:00–1:29 (cold open): no NOAA clip; own diagrams only. After the third check, NOAA clips appear only under general sentences (1:29 footage note, 'three seas', 'Then there are the hunters', microbes from other Red Sea pools, the closing line); about 5% of runtime (depth profile, 260 × 70 m outline, salinity bar 40 vs 160 PSU, layered core).
+- Every NOAA clip carries an on-screen label, e.g. "Gulf of Mexico brine pool · NOAA Ocean Exploration · 2014".
 - "More than five million years ago" (salt section): general dating of the Late Miocene, not a number from the paper.

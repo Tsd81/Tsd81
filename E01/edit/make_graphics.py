@@ -237,7 +237,7 @@ save(im, "salt_source")
 im, d = base()
 title(d, "The shore, in rings", "From ordinary mud to permanent brine")
 zones = [("ordinary mud", (70, 70, 64), "burrowed by animals"), ("gray band · 1–2 m", GRAYZ, "microbes that use oxygen"),
-         ("orange swash zone", ORANGE, "brine washes over it"), ("brine pool", BRINE, "microbes that live without oxygen")]
+         ("orange swash zone", ORANGE, "brine washes over it · mostly no-oxygen microbes"), ("brine pool", BRINE, "microbes that live without oxygen")]
 x = 120
 for i, (n, col, note) in enumerate(zones):
     w = [520, 360, 300, 520][i]
@@ -245,9 +245,9 @@ for i, (n, col, note) in enumerate(zones):
     d.text((x + 16, 470 - (i % 2) * 50), n, font=F(SEMI, 30), fill=WHITE)
     d.text((x + 16, 730 + (i % 2) * 44), note, font=F(MED, 26), fill=GREY)
     x += w
-d.text((1000, 340), "clams: 20 cm band just above the brine", font=F(MED, 28), fill=CYAN, anchor="mm")
-d.line([(1000, 362), (1000, 515)], fill=CYAN, width=3)
-d.polygon([(990, 500), (1010, 500), (1000, 516)], fill=CYAN)
+d.text((940, 340), "clams: gray and orange bands, 20 cm above the brine", font=F(MED, 28), fill=CYAN, anchor="mm")
+d.line([(640, 380), (1240, 380)], fill=CYAN, width=3)
+for xx in (640, 1240): d.line([(xx, 380), (xx, 515)], fill=CYAN, width=3)
 source(d, "Purkis et al. 2022, Fig. 7 and 10. Widths schematic.")
 save(im, "shore_rings")
 

@@ -49,26 +49,26 @@ SHORE_FMR = C("EX1202L3_VID_20120421T195026Z_ROVHD_FMR_BRINE_POOL_Low.mp4", "00:
 PLAN = [
     # 0 cold open: Aqaba facts -> graphics only
     [[G("profile_sonar")], [G("lake_outline")], [G("map_aqaba")], [G("shore_rings")], [G("measurements")], [G("core")], [G("card_title")]],
-    # 1 about the pictures
+    # 1 about the pictures (general)
     [[LAKE1, G("card_footage")]],
     # 2 location
-    [[G("map_redsea")], [G("map_aqaba")], [G("map_aqaba")], [G("profile")], [MIRROR, LAKE7, SHORE_FMR], [G("profile")]],
+    [[G("map_redsea")], [G("map_aqaba")], [G("map_aqaba")], [G("profile")], [MIRROR, G("map_aqaba")], [G("profile")]],
     # 3 how you miss a lake
-    [[G("profile_sonar")], [G("profile_sonar")], [G("profile_sonar")], [G("lake_outline")], [SLED, PTMAN], [G("imaging_sonar")], [ROVIN]],
+    [[G("profile_sonar")], [G("profile_sonar")], [G("profile_sonar")], [G("lake_outline")], [G("lake_outline")], [G("imaging_sonar")], [G("rov_landed")]],
     # 4 lake you can land on
-    [[G("rov_landed")], [G("rov_landed")], [G("measurements")], [G("measurements")], [G("measurements")], [G("measurements")], [G("measurements")], [G("syrup")], [CHANNEL]],
+    [[G("rov_landed")], [G("rov_landed")], [G("measurements")], [G("measurements")], [G("measurements")], [G("measurements")], [G("measurements")], [G("syrup")], [G("syrup")]],
     # 5 salt
-    [[G("seeps")], [G("seeps")], [G("salt_source")], [G("salt_source")], [G("salt_source")], [ORANGE, MATCHAN]],
+    [[G("seeps")], [G("seeps")], [G("salt_source")], [G("salt_source")], [G("salt_source")], [G("salt_source")]],
     # 6 life on the shore
-    [[MUD], [LAKE3], [G("shore_rings"), WHITEDGE], [G("shore_rings")], [SHRIMP], [EEL, FISH_SHELLS], [G("lake_shrimp")], [G("shore_rings")], [ORANGE], [G("core")]],
+    [[G("map_aqaba")], [G("shore_rings")], [G("shore_rings")], [G("shore_rings")], [SHRIMP], [G("lake_shrimp")], [G("lake_shrimp")], [G("lake_shrimp")], [ORANGE, MATCHAN], [G("core")]],
     # 7 mud that remembers
     [[G("core")], [G("core")], [G("core")], [G("settling")], [G("settling")], [G("syrup")], [G("core")]],
     # 8 event layers
-    [[G("core")], [CLOUD, G("core")], [G("core")], [G("core")], [G("core")]],
+    [[G("core")], [G("core")], [G("core")], [G("core")], [G("core")]],
     # 9 matching layers
     [[G("five_ways")], [G("five_ways")], [G("five_ways")], [G("quake1995")], [G("map_aqaba")], [G("core")]],
     # 10 open questions
-    [[G("open_questions")], [G("open_questions"), RIM], [MATCHAN], [FLOW, BUBBLES], [SHORE8, CLAMS], [LAKE1]],
+    [[G("open_questions")], [G("open_questions")], [G("core")], [G("measurements")], [G("map_aqaba")], [LAKE1]],
 ]
 
 tl = []; t = 0.0

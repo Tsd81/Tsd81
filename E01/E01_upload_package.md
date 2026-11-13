@@ -39,7 +39,7 @@ brine pool, underwater lake, deep sea, Gulf of Aqaba, Red Sea, NEOM brine pools,
 ## Studio settings
 - Visibility: **Private** (public only after Teodor's explicit "yes" in chat)
 - Audience: No, it's not made for kids
-- Altered or synthetic content / AI use: **Yes** (realistic AI narration voice; YouTube asks for disclosure of realistic AI audio, and disclosure does not limit reach or monetisation)
+- Altered or synthetic content / AI use: **Yes** (voluntary disclosure of the AI narration voice; unsure whether a generic AI narrator strictly requires it, so we disclose)
 - Category: Science & Technology
 - Video language: English · Title/description language: English
 - License: Standard YouTube License
