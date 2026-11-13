@@ -1,0 +1,273 @@
+[
+ {
+  "t": 0.0,
+  "d": 11.843,
+  "kind": "gfx",
+  "name": "profile_sonar"
+ },
+ {
+  "t": 11.843,
+  "d": 10.077,
+  "kind": "gfx",
+  "name": "lake_outline"
+ },
+ {
+  "t": 21.92,
+  "d": 9.815,
+  "kind": "gfx",
+  "name": "map_aqaba"
+ },
+ {
+  "t": 31.735,
+  "d": 17.078,
+  "kind": "gfx",
+  "name": "shore_rings"
+ },
+ {
+  "t": 48.812,
+  "d": 11.451,
+  "kind": "gfx",
+  "name": "measurements"
+ },
+ {
+  "t": 60.263,
+  "d": 22.574,
+  "kind": "gfx",
+  "name": "core"
+ },
+ {
+  "t": 82.837,
+  "d": 6.231,
+  "kind": "gfx",
+  "name": "card_title"
+ },
+ {
+  "t": 89.068,
+  "d": 16.217,
+  "kind": "clip",
+  "file": "EX1711_VID_20171212T165500Z_ROVHD_Low.mp4",
+  "ss": "00:03:44",
+  "label": "Gulf of Mexico brine pool \u00b7 NOAA Ocean Exploration \u00b7 2017"
+ },
+ {
+  "t": 105.285,
+  "d": 16.217,
+  "kind": "gfx",
+  "name": "card_footage"
+ },
+ {
+  "t": 121.502,
+  "d": 8.952,
+  "kind": "gfx",
+  "name": "map_redsea"
+ },
+ {
+  "t": 130.454,
+  "d": 32.068,
+  "kind": "gfx",
+  "name": "map_aqaba"
+ },
+ {
+  "t": 162.522,
+  "d": 17.437,
+  "kind": "gfx",
+  "name": "profile"
+ },
+ {
+  "t": 179.959,
+  "d": 13.529,
+  "kind": "clip",
+  "file": "EX1202L3_VID_20120420T204701Z_ROVHD_CAR_BRINE_POOL_Low.mp4",
+  "ss": "00:00:07",
+  "label": "Gulf of Mexico brine pool \u00b7 NOAA Ocean Exploration \u00b7 2012"
+ },
+ {
+  "t": 193.488,
+  "d": 13.529,
+  "kind": "gfx",
+  "name": "map_aqaba"
+ },
+ {
+  "t": 207.016,
+  "d": 7.08,
+  "kind": "gfx",
+  "name": "profile"
+ },
+ {
+  "t": 214.096,
+  "d": 24.529,
+  "kind": "gfx",
+  "name": "profile_sonar"
+ },
+ {
+  "t": 238.626,
+  "d": 34.41,
+  "kind": "gfx",
+  "name": "lake_outline"
+ },
+ {
+  "t": 273.036,
+  "d": 24.394,
+  "kind": "gfx",
+  "name": "imaging_sonar"
+ },
+ {
+  "t": 297.43,
+  "d": 33.863,
+  "kind": "gfx",
+  "name": "rov_landed"
+ },
+ {
+  "t": 331.292,
+  "d": 49.598,
+  "kind": "gfx",
+  "name": "measurements"
+ },
+ {
+  "t": 380.892,
+  "d": 20.248,
+  "kind": "gfx",
+  "name": "syrup"
+ },
+ {
+  "t": 401.14,
+  "d": 31.262,
+  "kind": "gfx",
+  "name": "seeps"
+ },
+ {
+  "t": 432.402,
+  "d": 63.657,
+  "kind": "gfx",
+  "name": "salt_source"
+ },
+ {
+  "t": 496.059,
+  "d": 9.908,
+  "kind": "gfx",
+  "name": "map_aqaba"
+ },
+ {
+  "t": 505.967,
+  "d": 54.999,
+  "kind": "gfx",
+  "name": "shore_rings"
+ },
+ {
+  "t": 560.966,
+  "d": 1.82,
+  "kind": "clip",
+  "file": "EX1711_VID_20171212T165500Z_ROVHD_Low.mp4",
+  "ss": "00:04:28",
+  "label": "Gulf of Mexico brine pool \u00b7 NOAA Ocean Exploration \u00b7 2017"
+ },
+ {
+  "t": 562.786,
+  "d": 46.035,
+  "kind": "gfx",
+  "name": "lake_shrimp"
+ },
+ {
+  "t": 608.821,
+  "d": 5.426,
+  "kind": "clip",
+  "file": "EX1202L3_VID_20120420T193512Z_ROVHD_BRINE_POOL_TUB_Low.mp4",
+  "ss": "00:00:00",
+  "label": "Gulf of Mexico brine pool \u00b7 NOAA Ocean Exploration \u00b7 2012"
+ },
+ {
+  "t": 614.247,
+  "d": 5.426,
+  "kind": "clip",
+  "file": "EX1202L3_VID_20120420T204701Z_ROVHD_CAR_BRINE_POOL_Low.mp4",
+  "ss": "00:01:24",
+  "label": "Gulf of Mexico brine pool \u00b7 NOAA Ocean Exploration \u00b7 2012"
+ },
+ {
+  "t": 619.673,
+  "d": 47.089,
+  "kind": "gfx",
+  "name": "core"
+ },
+ {
+  "t": 666.762,
+  "d": 31.362,
+  "kind": "gfx",
+  "name": "settling"
+ },
+ {
+  "t": 698.124,
+  "d": 18.317,
+  "kind": "gfx",
+  "name": "syrup"
+ },
+ {
+  "t": 716.441,
+  "d": 73.022,
+  "kind": "gfx",
+  "name": "core"
+ },
+ {
+  "t": 789.463,
+  "d": 35.848,
+  "kind": "gfx",
+  "name": "five_ways"
+ },
+ {
+  "t": 825.311,
+  "d": 32.764,
+  "kind": "gfx",
+  "name": "quake1995"
+ },
+ {
+  "t": 858.074,
+  "d": 19.261,
+  "kind": "gfx",
+  "name": "map_aqaba"
+ },
+ {
+  "t": 877.335,
+  "d": 7.517,
+  "kind": "gfx",
+  "name": "core"
+ },
+ {
+  "t": 884.852,
+  "d": 9.777,
+  "kind": "gfx",
+  "name": "open_questions"
+ },
+ {
+  "t": 894.63,
+  "d": 22.461,
+  "kind": "gfx",
+  "name": "core"
+ },
+ {
+  "t": 917.091,
+  "d": 14.93,
+  "kind": "gfx",
+  "name": "measurements"
+ },
+ {
+  "t": 932.021,
+  "d": 23.651,
+  "kind": "gfx",
+  "name": "map_aqaba"
+ },
+ {
+  "t": 955.672,
+  "d": 10.108,
+  "kind": "clip",
+  "file": "EX1711_VID_20171212T165500Z_ROVHD_Low.mp4",
+  "ss": "00:03:44",
+  "label": "Gulf of Mexico brine pool \u00b7 NOAA Ocean Exploration \u00b7 2017"
+ },
+ {
+  "t": 965.78,
+  "d": 6.0,
+  "kind": "gfx",
+  "name": "card_sources",
+  "zoom": 0.0
+ }
+]
