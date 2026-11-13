@@ -24,11 +24,11 @@ And that is the part the scientists cared about most. Because mud that nothing t
 
 So how do you miss a lake? And what else is written in the mud at the bottom of it?
 
-## 1:32 About the pictures
+## 1:29 About the pictures
 
 One note before we go down. The team that found this lake filmed it, but that footage isn't free to use. The underwater shots in this video come from NOAA Ocean Exploration, mostly from brine pools in the Gulf of Mexico. They show the same kind of place, on the other side of the world. Almost every number about this lake comes from one paper: Purkis and colleagues, published in 2022 in Communications Earth and Environment. Where we use other sources, we say so. The links are in the description.
 
-## 2:04 A hole at the edge of a narrow sea
+## 2:01 A hole at the edge of a narrow sea
 
 The Gulf of Aqaba is the narrow northeastern arm of the Red Sea. Egypt's Sinai Peninsula is on one side. Saudi Arabia is on the other.
 
@@ -42,7 +42,7 @@ Lakes like this are rare. According to the paper, brine pools are known from onl
 
 That closeness to shore turns out to matter more than anything else about it. We'll get there.
 
-## 3:35 How you miss a lake
+## 3:34 How you miss a lake
 
 First, the miss.
 
@@ -58,7 +58,7 @@ Once they knew where to look, the robot's own sonar could see it. That sonar wor
 
 Then they did something that sounds impossible. They parked the robot on the lake.
 
-## 5:04 A lake you can land on
+## 5:03 A lake you can land on
 
 The brine is so dense that the team landed their remotely operated vehicle on its surface. The paper gives the robot's weight as ten thousand pounds, about four and a half tonnes on deck. The brine was dense enough for it to settle on.
 
@@ -78,7 +78,7 @@ Think of a glass with syrup at the bottom and water poured gently on top. The tw
 
 Which raises the obvious question. Where does that much salt come from, two kilometers from a desert coast?
 
-## 6:42 Where the salt comes from
+## 6:41 Where the salt comes from
 
 At least part of the answer was leaking out of the slope.
 
@@ -92,7 +92,7 @@ So the authors favor the second option. Beneath the gulf lie thick layers of sal
 
 The brine has one more chemical oddity. It holds less sulfate, relative to its chloride, than any other brine measured in the Red Sea and Gulf of Aqaba system. Something in the lake has been consuming it. That something is alive.
 
-## 8:17 Life on the shore
+## 8:16 Life on the shore
 
 Over six weeks of dives in this gulf, the team describes the deep floor as a desolate seabed, thickly draped with mud. Few species. Little variety.
 
@@ -114,7 +114,7 @@ Microbes from other Red Sea brine pools have already yielded molecules with anti
 
 But for this team, the biggest surprise was in the mud.
 
-## 10:27 The mud that remembers
+## 10:24 The mud that remembers
 
 They pushed tubes into the lakebed along a line from the ordinary seabed into the brine.
 
@@ -130,7 +130,7 @@ Picture a handful of sand and dust dropped into a tall jar of syrup. The sand la
 
 So what's in the layers?
 
-## 12:02 Two kinds of event
+## 11:58 Two kinds of event
 
 The core shows two kinds of event layer, plus signs of shaking.
 
@@ -142,7 +142,7 @@ The second kind is finer. At least fifty thin layers, each grading from sand at 
 
 And in three places, the layers are bent and contorted. The authors say that is consistent with earthquake shaking.
 
-## 13:10 Matching layers to disasters
+## 13:09 Matching layers to disasters
 
 The coarse layers are the puzzle. How does gravel from land end up at the bottom of a deep basin?
 
@@ -156,7 +156,7 @@ The second date is older. The thickest layer, from roughly six to seven centurie
 
 Neither match proves a tsunami. They are dates that line up, which is how a case like this starts.
 
-## 14:40 What we don't know yet
+## 14:44 What we don't know yet
 
 Here is what the paper leaves open.
 
@@ -174,7 +174,7 @@ The best way to find out: go back and measure the same lake again, over years. U
 
 ## Notes for edit (not narrated)
 - Coarse layers: Discussion and Fig. 8 say ten; the Results text lists eight dated intervals. Script says "about ten".
-- Sections 00, 02, 03, 06, 08, 09, 10 changed in v3; narration audio is still v2 until re-voiced.
+- Sections 00, 02, 03, 06, 08, 09, 10 re-voiced for v3 (9,664 credits); v2 audio kept in audio/v2/.
 - Radiocarbon: the paper reports the youngest coarse layer at 50 cal yr BP (Marine20, BP = before 1950 → ~1900 CE) and still calls it a match to 1995 ("~20 yr discrepancy"). The paper is internally inconsistent; the script only reports the authors' judgement.
 - Core length: paper gives both 150 cm (push depth, Fig. 7/8) and 135 cm (Methods, age model). Script says "more than a meter".
 - UM news says a four-week voyage; the paper says six weeks. Script follows the paper.

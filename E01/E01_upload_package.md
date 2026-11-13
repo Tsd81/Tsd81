@@ -11,16 +11,16 @@ This episode is built on one peer-reviewed paper. Where we use other sources, we
 
 Chapters
 0:00 A lake no one saw
-1:32 About the pictures
-2:04 A hole at the edge of a narrow sea
-3:35 How you miss a lake
-5:04 A lake you can land on
-6:42 Where the salt comes from
-8:17 Life on the shore
-10:27 The mud that remembers
-12:02 Two kinds of event
-13:10 Matching layers to disasters
-14:40 What we don't know yet
+1:29 About the pictures
+2:01 A hole at the edge of a narrow sea
+3:34 How you miss a lake
+5:03 A lake you can land on
+6:41 Where the salt comes from
+8:16 Life on the shore
+10:24 The mud that remembers
+11:58 Two kinds of event
+13:09 Matching layers to disasters
+14:44 What we don't know yet
 
 Sources
 Purkis S.J. et al. (2022). Discovery of the deep-sea NEOM Brine Pools in the Gulf of Aqaba, Red Sea. Communications Earth & Environment 3:146. https://doi.org/10.1038/s43247-022-00482-x (CC BY 4.0)
