@@ -4,7 +4,9 @@ import json, sys
 
 sections_txt, out = sys.argv[1], sys.argv[2]
 secs = open(sections_txt).read().split("\n\n=====\n\n")
-DUR = [91.48, 31.63, 90.04, 88.53, 96.52, 94.12, 129.49, 93.88, 67.71, 89.55, 81.79]
+import subprocess, os
+AUD = sys.argv[3] if len(sys.argv) > 3 else "../audio"
+DUR = [float(subprocess.check_output(["ffprobe", "-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0", os.path.join(AUD, f"s{i:02d}.mp3")])) for i in range(11)]
 GAP = 0.8
 Y = {"EX1202": "2012", "EX1402": "2014", "EX1711": "2017", "EX1803": "2018"}
 
@@ -52,13 +54,13 @@ PLAN = [
     # 2 location
     [[G("map_redsea")], [G("map_aqaba")], [G("map_aqaba")], [G("profile")], [MIRROR, LAKE7, SHORE_FMR], [G("profile")]],
     # 3 how you miss a lake
-    [[G("profile_sonar")], [G("profile_sonar")], [G("profile_sonar")], [G("lake_outline")], [SLED, PTMAN], [SONAR, RIM], [ROVIN]],
+    [[G("profile_sonar")], [G("profile_sonar")], [G("profile_sonar")], [G("lake_outline")], [SLED, PTMAN], [G("imaging_sonar")], [ROVIN]],
     # 4 lake you can land on
-    [[ROVIN, CLOUD], [SHORE8], [G("measurements")], [G("measurements")], [G("measurements")], [G("measurements")], [G("measurements")], [G("syrup")], [CHANNEL]],
+    [[G("rov_landed")], [G("rov_landed")], [G("measurements")], [G("measurements")], [G("measurements")], [G("measurements")], [G("measurements")], [G("syrup")], [CHANNEL]],
     # 5 salt
-    [[G("seeps")], [FLOW, FLOW22], [G("salt_source")], [G("salt_source")], [G("salt_source")], [ORANGE, MATCHAN]],
+    [[G("seeps")], [G("seeps")], [G("salt_source")], [G("salt_source")], [G("salt_source")], [ORANGE, MATCHAN]],
     # 6 life on the shore
-    [[MUD], [LAKE3], [G("shore_rings"), WHITEDGE], [CLAMS, MUSSELS], [SHRIMP], [EEL, FISH_SHELLS], [SHRIMP, SHORE14], [G("shore_rings")], [ORANGE], [G("core")]],
+    [[MUD], [LAKE3], [G("shore_rings"), WHITEDGE], [G("shore_rings")], [SHRIMP], [EEL, FISH_SHELLS], [G("lake_shrimp")], [G("shore_rings")], [ORANGE], [G("core")]],
     # 7 mud that remembers
     [[G("core")], [G("core")], [G("core")], [G("settling")], [G("settling")], [G("syrup")], [G("core")]],
     # 8 event layers
@@ -66,7 +68,7 @@ PLAN = [
     # 9 matching layers
     [[G("five_ways")], [G("five_ways")], [G("five_ways")], [G("quake1995")], [G("map_aqaba")], [G("core")]],
     # 10 open questions
-    [[G("open_questions")], [RIM], [MATCHAN], [BUBBLES], [SHORE8], [LAKE1]],
+    [[G("open_questions")], [G("open_questions"), RIM], [MATCHAN], [FLOW, BUBBLES], [SHORE8, CLAMS], [LAKE1]],
 ]
 
 tl = []; t = 0.0

@@ -159,7 +159,8 @@ cx, cy = 960, 600; L = 1300; Wd = L * 70 / 260
 pts = []
 for a in range(0, 360, 4):
     r = 1 + 0.06 * math.sin(math.radians(a) * 3) + 0.03 * math.cos(math.radians(a) * 5)
-    pts.append((cx + L / 2 * r * math.cos(math.radians(a)), cy + Wd / 2 * r * math.sin(math.radians(a))))
+    c, sn = math.cos(math.radians(a)), math.sin(math.radians(a))
+    pts.append((cx + L / 2 * r * math.copysign(abs(c) ** 0.8, c), cy + Wd / 2 * r * math.copysign(abs(sn) ** 1.9, sn)))
 d.polygon(pts, fill=BRINE, outline=ORANGE)
 d.line([(cx - L / 2, cy + Wd / 2 + 70), (cx + L / 2, cy + Wd / 2 + 70)], fill=WHITE, width=3)
 ctext(d, (cx, cy + Wd / 2 + 100), "260 m", F(SEMI, 34), WHITE)
@@ -203,17 +204,18 @@ save(im, "syrup")
 
 # ---------- seeps on slope ----------
 im, d = base()
-title(d, "Brine seeping from the slope", "Point sources every 2–3 m, up to 5 m above the pool")
-d.polygon([(200, 260), (1100, 260), (1500, 880), (200, 880)], fill=LAND)
-d.polygon([(1380, 880), (1500, 880), (1520, 905), (1800, 905), (1800, 1000), (1380, 1000)], fill=LAND)
-d.rectangle([1440, 880, 1800, 905], fill=BRINE)
-for i in range(6):
-    x = 1180 + i * 45; y = 400 + i * 80
-    d.ellipse([x - 9, y - 9, x + 9, y + 9], fill=ORANGE)
-    d.line([(x, y), (x + 90 + i * 8, 880)], fill=ORANGE, width=6)
-d.text((1550, 860), "pool", font=F(SEMI, 32), fill=WHITE, anchor="lb")
-d.text((780, 600), "slope", font=F(MED, 34), fill=GREY, anchor="mm")
-source(d, "Purkis et al. 2022, Fig. 5 and text. Schematic.")
+title(d, "Brine seeping from the slope", "One seep every 2–3 m along the 260 m shore, up to 5 m above the pool")
+d.polygon([(200, 260), (1100, 260), (1450, 880), (200, 880)], fill=LAND)
+d.polygon([(200, 880), (1900, 880), (1900, 1000), (200, 1000)], fill=LAND)
+d.rectangle([1450, 860, 1900, 880], fill=BRINE)
+for (x, y) in [(1330, 668), (1365, 730), (1395, 785)]:
+    d.ellipse([x - 10, y - 10, x + 10, y + 10], fill=ORANGE)
+    t = (860 - y) / (880 - 260)
+    d.line([(x, y), (1452, 860)], fill=ORANGE, width=7)
+d.text((1600, 840), "pool", font=F(SEMI, 32), fill=WHITE, anchor="mb")
+d.text((1150, 700), "seeps (up to 5 m above the pool)", font=F(MED, 28), fill=ORANGE, anchor="rm")
+d.text((700, 600), "slope", font=F(MED, 34), fill=GREY, anchor="mm")
+source(d, "Purkis et al. 2022, Fig. 5 and text. Cross-section, schematic; spacing is along the shore.")
 save(im, "seeps")
 
 # ---------- salt source ----------
@@ -243,7 +245,9 @@ for i, (n, col, note) in enumerate(zones):
     d.text((x + 16, 470 - (i % 2) * 50), n, font=F(SEMI, 30), fill=WHITE)
     d.text((x + 16, 730 + (i % 2) * 44), note, font=F(MED, 26), fill=GREY)
     x += w
-d.text((1000, 340), "clams live in a 20 cm band here ↓", font=F(MED, 28), fill=CYAN)
+d.text((1000, 340), "clams: 20 cm band just above the brine", font=F(MED, 28), fill=CYAN, anchor="mm")
+d.line([(1000, 362), (1000, 515)], fill=CYAN, width=3)
+d.polygon([(990, 500), (1010, 500), (1000, 516)], fill=CYAN)
 source(d, "Purkis et al. 2022, Fig. 7 and 10. Widths schematic.")
 save(im, "shore_rings")
 
@@ -255,11 +259,11 @@ d.rectangle([cx0, cy0, cx1, cy1], fill=(85, 75, 60))
 import random; random.seed(3)
 for k in range(55):
     y = random.uniform(cy0 + 5, cy1 - 5); d.line([(cx0, y), (cx1, y)], fill=(120, 105, 80), width=random.choice([1, 2, 3]))
-for y, th in [(300, 8), (360, 6), (430, 30), (520, 8), (600, 6), (700, 10), (780, 6), (850, 8), (900, 6), (950, 8)]:
+for y, th in [(300, 8), (360, 6), (420, 8), (530, 150), (720, 8), (780, 6), (840, 10), (890, 6), (930, 8), (965, 8)]:
     d.rectangle([cx0, y, cx1, y + th], fill=SAND)
 d.text((cx0 - 30, cy0), "top · today", font=F(MED, 28), fill=GREY, anchor="ra")
 d.text((cx0 - 30, cy1), "≈ 1,200 years ago", font=F(MED, 28), fill=GREY, anchor="rd")
-d.rectangle([1040, 330, 1080, 360], fill=SAND); d.text((1100, 345), "10 coarse layers from land · ~1 per century", font=F(SEMI, 34), fill=WHITE, anchor="lm")
+d.rectangle([1040, 330, 1080, 360], fill=SAND); d.text((1100, 345), "about 10 coarse layers from land · ~1 per century", font=F(SEMI, 34), fill=WHITE, anchor="lm")
 d.rectangle([1040, 450, 1080, 480], fill=(120, 105, 80)); d.text((1100, 465), "≥ 50 fine flow layers · ≥ 4 per century", font=F(SEMI, 34), fill=WHITE, anchor="lm")
 d.text((1060, 585), "≈", font=F(BOLD, 40), fill=ORANGE, anchor="mm"); d.text((1100, 585), "3 contorted intervals · consistent with shaking", font=F(SEMI, 34), fill=WHITE, anchor="lm")
 source(d, "Purkis et al. 2022, Fig. 8 and Discussion. Layer positions schematic.")
@@ -350,3 +354,46 @@ print("ok", sorted(os.listdir(OUT)))
 
 im, d = base()
 save(im, "_bg")
+
+im, d = base()
+title(d, "A lake you can land on", "The team set its robot down on the brine surface")
+d.rectangle([300, 640, 1620, 900], fill=BRINE)
+d.line([(300, 640), (1620, 640)], fill=CYAN, width=4)
+d.rounded_rectangle([780, 470, 1140, 640], radius=18, fill=(200, 205, 210))
+d.text((960, 555), "ROV", font=F(BOLD, 60), fill=(20, 40, 60), anchor="mm")
+d.text((1180, 520), "10,000 lb (about 4.5 t on deck)", font=F(SEMI, 36), fill=WHITE, anchor="lm")
+d.text((960, 770), "brine · 160 PSU", font=F(SEMI, 36), fill=WHITE, anchor="mm")
+d.text((960, 420), "dye showed a sharp boundary", font=F(MED, 30), fill=CYAN, anchor="mm")
+source(d, "Purkis et al. 2022, Fig. 2 and Discussion. Schematic.")
+save(im, "rov_landed")
+
+im, d = base()
+title(d, "Imaging sonar on the robot", "450–900 kHz: the brine showed as a weak, \u201cdampened\u201d echo")
+d.pieslice([360, 300, 1560, 1500], 225, 315, fill=(14, 40, 62), outline=DIM)
+for k in range(1, 6):
+    r = k * 120; d.arc([960 - r, 900 - r, 960 + r, 900 + r], 225, 315, fill=DIM, width=1)
+import random as _r; _r.seed(5)
+for i in range(1400):
+    a = math.radians(_r.uniform(228, 312)); rr = _r.uniform(60, 590)
+    x, y = 960 + rr * math.cos(a), 900 + rr * math.sin(a)
+    inside = ((x - 960) / 260) ** 2 + ((y - 520) / 80) ** 2 < 1
+    v = _r.randint(40, 80) if inside else _r.randint(120, 230)
+    d.ellipse([x - 3, y - 3, x + 3, y + 3], fill=(v, v + 20, v + 30))
+d.text((960, 520), "brine", font=F(SEMI, 34), fill=CYAN, anchor="mm")
+source(d, "Purkis et al. 2022, Methods. Illustration, not the team's sonar image.")
+save(im, "imaging_sonar")
+
+im, d = base()
+title(d, "Shrimp out over the lake", "Seen as far as mid-pool, more than 30 m from the shore")
+cx, cy = 960, 620
+pts = []
+for a in range(0, 360, 4):
+    c, sn = math.cos(math.radians(a)), math.sin(math.radians(a))
+    pts.append((cx + 650 * math.copysign(abs(c) ** 0.8, c), cy + 175 * math.copysign(abs(sn) ** 1.9, sn)))
+d.polygon(pts, fill=BRINE, outline=ORANGE)
+d.ellipse([cx - 14, cy - 14, cx + 14, cy + 14], fill=RED)
+d.line([(cx, cy), (cx, cy - 175)], fill=WHITE, width=3)
+d.text((cx + 24, cy - 90), "> 30 m", font=F(SEMI, 34), fill=WHITE, anchor="lm")
+d.text((cx, cy + 50), "shrimp (Plesionika sp.)", font=F(MED, 28), fill=WHITE, anchor="mt")
+source(d, "Purkis et al. 2022, Fig. 9. Positions schematic.")
+save(im, "lake_shrimp")

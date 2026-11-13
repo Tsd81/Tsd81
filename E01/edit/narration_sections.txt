@@ -6,9 +6,9 @@ It was found on a robot dive. And it took the robot's own imaging sonar to pick 
 
 What the robot's lights showed next is why this place matters. Along the shore, shrimp were working. Some went more than thirty meters out over the lake to collect animals the water had stunned or killed. An eel kept dipping into the brine and pulling back out.
 
-The water in that lake is about four times saltier than the sea above it, and fifty centimeters below its surface there is almost no oxygen at all. Nothing digs in its mud. Nothing stirs it.
+The water in that lake is about four times saltier than the sea above it, and fifty centimeters below its surface there is almost no oxygen at all. Nothing burrows in its mud.
 
-And that is the part the scientists cared about most. Because mud that nothing touches keeps a record. In this case, a record of floods, earthquakes and, most likely, tsunamis, going back at least twelve hundred years. The youngest of its coarse layers may line up with a magnitude seven point two earthquake that shook this coast in 1995.
+And that is the part the scientists cared about most. Because mud that nothing touches keeps a record. In this case, a likely record of floods and earthquakes, and possibly tsunamis, going back at least twelve hundred years. The youngest of its coarse layers may line up with a magnitude seven point two earthquake that shook this coast in 1995.
 
 So how do you miss a lake? And what else is written in the mud at the bottom of it?
 
@@ -26,7 +26,7 @@ That geometry has a cost. Earthquakes above magnitude five strike this area. In 
 
 The lake sits at the very foot of the Saudi slope, two kilometers from the coast. Its eastern shore is the slope itself, rising at thirty-five degrees. Follow that slope up through one point seven kilometers of water and you reach a coral reef in full sunlight.
 
-Lakes like this are rare. Brine pools are known from only three seas: the Gulf of Mexico, the Mediterranean, and the Red Sea. Across all three, scientists have found a few dozen. This one was the first found outside the Red Sea proper. And no other brine pool in the region sits so close to land. The next closest is twenty-five kilometers offshore.
+Lakes like this are rare. According to the paper, brine pools are known from only three seas: the Gulf of Mexico, the Mediterranean, and the Red Sea. Across all three, scientists have found a few dozen. This one was the first found in the Gulf of Aqaba, outside the main body of the Red Sea. And no other brine pool in the region sits so close to land. The next closest is twenty-five kilometers offshore.
 
 That closeness to shore turns out to matter more than anything else about it. We'll get there.
 
@@ -38,7 +38,7 @@ The ship was OceanXplorer, an eighty-seven-meter research vessel. Its hull carri
 
 The paper states the result in one dry sentence. The pools "lacked a multibeam signature."
 
-It doesn't say why. One guess, ours and not the paper's: the lake is only six meters deep at its center, and its surface is flat. A flat layer of liquid filling a shallow dip may look, to a ship one point seven kilometers above, like ordinary flat seafloor.
+It doesn't say why. One guess, ours and not the paper's: the lake is only six meters deep at its center, and its surface is flat. A flat layer of liquid filling a shallow dip may look, to a ship almost one point eight kilometers above, like ordinary flat seafloor.
 
 So the lake was found the slow way. A robot went down and looked. According to the University of Miami, the team's leader, Sam Purkis, said the discovery came in the last five minutes of the ten-hour dive they could dedicate to this project.
 
@@ -86,7 +86,7 @@ Over six weeks of dives in this gulf, the team describes the deep floor as a des
 
 The lake is the exception.
 
-Its shore is laid out in rings. Furthest out is ordinary mud. Then a gray band, one to two meters wide, stained by a dense film of microbes. Then an orange band right at the waterline, where the brine washes back and forth. Inside the lake, the microbes change. The ones that need oxygen give way to microbes that live without it, including bacteria that feed on sulfate. Those are the ones eating the sulfate out of the brine.
+Its shore is laid out in rings. Furthest out is ordinary mud. Then a gray band, one to two meters wide, stained by a dense film of microbes. Then an orange band right at the waterline, where the brine washes back and forth. Inside the lake, the microbes change. The ones that need oxygen give way to microbes that live without it, including bacteria that can feed on sulfate. They are the likely reason the brine has so little of it.
 
 In a twenty-centimeter band just above the surface lives a black clam, Apachecorbula muriatica. It has been found living this way, right at the edge of the brine, around another Red Sea brine pool. The team suggests that this clam, and the animals around it, may ultimately depend on the microbes, which make their energy from chemistry instead of sunlight.
 
@@ -122,9 +122,9 @@ So what's in the layers?
 
 The core shows two kinds of event layer, plus signs of shaking.
 
-The first is coarse. Rose-colored layers of sand and small gravel, made of quartz and feldspar. These grains come from land. The slope above the lake is built from reef debris and lime mud, so they did not simply slide down from next door. Something carried them off the coast and down one point seven kilometers.
+The first is coarse. Rose-colored layers of sand and small gravel, made of quartz and feldspar. The authors conclude these grains come from land. The slope above the lake is built from reef debris and lime mud, so they did not simply slide down from next door. Something carried them off the coast and down almost one point eight kilometers.
 
-There are ten of these coarse layers in the last thousand years. That's roughly one per century. The thickest is thirty centimeters, dated to roughly six centuries ago.
+There are about ten of these coarse layers in the last thousand years. That's roughly one per century. The thickest is thirty centimeters, dated to roughly six to seven centuries ago.
 
 The second kind is finer. At least fifty thin layers, each grading from sand at the bottom to mud at the top. They're the signature of underwater sediment flows. The authors compare them to deposits from flash floods, when rare desert storms send muddy water rushing out of dry valleys into the gulf. Fifty in twelve hundred years is at least four per century.
 
@@ -138,9 +138,9 @@ The authors list five ways. Rivers: there are no permanent rivers flowing into t
 
 That leaves tsunamis. The authors call them, quote, "to our minds the most plausible" explanation.
 
-Two dates support the idea. The authors consider the radiocarbon age of the youngest coarse layer consistent with the 1995 Nuweiba earthquake, given how large the dating error is for such young material. That earthquake struck on the twenty-second of November 1995, with a magnitude of seven point two according to the US Geological Survey. According to the paper, it ruptured part of a fault inside this same basin and generated a modest tsunami.
+Two dates support the idea. The authors link the youngest coarse layer to the 1995 Nuweiba earthquake. Its radiocarbon age actually points to around 1900, but the authors argue that dates this young are too uncertain to rule 1995 out. That earthquake struck on the twenty-second of November 1995, with a magnitude of seven point two according to the US Geological Survey. According to the paper, it ruptured part of a fault inside this same basin and generated a modest tsunami.
 
-The second date is older. The thickest layer, from roughly six centuries ago, broadly matches an underwater landslide in the Straits of Tiran, eighty kilometers south. Earlier work by the same lead author suggests that landslide may have sent a tsunami up the gulf toward this coast.
+The second date is older. The thickest layer, from roughly six to seven centuries ago, broadly matches an underwater landslide in the Straits of Tiran, to the south. Earlier work by the same lead author suggests that landslide may have sent a tsunami up the gulf toward this coast.
 
 Neither match proves a tsunami. They are dates that line up, which is how a case like this starts.
 
@@ -156,4 +156,4 @@ Third, the oxygen. The probe's readings at the bottom were below what it could r
 
 Fourth, the surface of the lake itself. The salinity jump at the boundary appears sharper than you'd expect if brine and seawater had been sitting together quietly for a long time. That could mean brine arrives in sudden pulses. One possible trigger is movement on the fault the lake sits on. The authors say their measurements aren't fine enough to be sure.
 
-There is one way to find out: go back and measure the same lake again, over years. Until someone does, the most recent pages of this record are still unread.
+The best way to find out: go back and measure the same lake again, over years. Until someone does, the most recent pages of this record are still unread.

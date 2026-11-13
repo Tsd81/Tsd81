@@ -5,9 +5,9 @@ The Seafloor Lake the Ship's Sonar Couldn't See
 
 ## Description
 
-In 2020, a research ship mapped the floor of the Gulf of Aqaba with multibeam sonar, and the survey showed no sign of what was there. A robot dive then found a lake 1,770 meters down: 260 meters long, four times saltier than the sea above, with almost no oxygen in it. Shrimp hunt along its shore. Its mud holds a record of floods, earthquakes and, most likely, tsunamis, going back at least 1,200 years.
+In 2020, a research ship mapped the floor of the Gulf of Aqaba with multibeam sonar, and the survey showed no sign of what was there. A robot dive then found a lake 1,770 meters down: 260 meters long, four times saltier than the sea above, with almost no oxygen in it. Shrimp scavenge along its shore. Its mud holds a likely record of floods and earthquakes, and possibly tsunamis, going back at least 1,200 years.
 
-This episode is built on one peer-reviewed paper. Where we use other sources, we say so on screen.
+This episode is built on one peer-reviewed paper. Where we use other sources, we say so in the narration or on screen; general background is our own.
 
 Chapters
 0:00 A lake no one saw
@@ -39,13 +39,13 @@ brine pool, underwater lake, deep sea, Gulf of Aqaba, Red Sea, NEOM brine pools,
 ## Studio settings
 - Visibility: **Private** (public only after Teodor's explicit "yes" in chat)
 - Audience: No, it's not made for kids
-- Altered or synthetic content: No (no realistic people, places or events are generated; narration voice is disclosed in the description)
+- Altered or synthetic content / AI use: **Yes** (realistic AI narration voice; YouTube asks for disclosure of realistic AI audio, and disclosure does not limit reach or monetisation)
 - Category: Science & Technology
 - Video language: English · Title/description language: English
 - License: Standard YouTube License
 - Comments: On, hold potentially inappropriate comments for review
 - Chapters: automatic from the description (first chapter at 0:00)
-- Subtitles: YouTube auto-captions (English); optionally upload E01_script_v2.md text as a transcript for auto-sync
+- Subtitles: YouTube auto-captions (English); optionally upload the narrated text only (edit/narration_sections.txt without the ===== separators) as a transcript for auto-sync
 
 ## Pinned comment (optional)
 The pools in this episode were discovered in 2020 and published in 2022. The paper's authors call the tsunami explanation "the most plausible", not proven. Questions for the next episode? Leave them below.
